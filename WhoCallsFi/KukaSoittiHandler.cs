@@ -22,7 +22,7 @@ namespace WhoCallsFi
 
     class KukaSoittiHandler : INumberDataSource
     {
-        public event EventHandler<DataReadyArgs> DataReady;
+        //public event EventHandler<DataReadyArgs> DataReady;
 
         private string assembleUri(string number)
         {
@@ -46,19 +46,12 @@ namespace WhoCallsFi
             var str = System.Text.Encoding.Default.GetString(bArray);
             return str;
         }
-        //INumberDataSource
-        public void SyncGetNumberData(string number, INumberDataReceiver receiver)
-        {
-            //string ret = this.syncReadPage(number);
-            //HandleResponce(number, ret, receiver);
-        }
 
         //INumberDataSource
         public void GetNumberData(string number, INumberDataReceiver receiver)
         {
             Thread th = new Thread(() => this.readPage(number, HandleResponce, receiver));
             th.Start();
-            //readPage(number, HandleResponce, receiver);
         }
 
         private void HandleResponce(string number, string str, INumberDataReceiver receiver) {

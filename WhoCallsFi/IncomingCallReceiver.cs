@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace WhoCallsFi
 {
-    class IncomingCallReceiver : PhoneStateListener, INumberDataReceiver, System.ComponentModel.ISynchronizeInvoke
+    class IncomingCallReceiver : PhoneStateListener, INumberDataReceiver
     {
         private Context mContext;
         private INumberDataSource mNumberDataSource;
@@ -33,58 +33,25 @@ namespace WhoCallsFi
         private int taskId;
 
 
-
-        public bool InvokeRequired
-        {
-            get
-            {
-                var currentTaskId = System.Threading.Tasks.TaskScheduler.Current.Id;
-                return taskId != currentTaskId;                
-            }
-        }
-
         public IncomingCallReceiver(Context context_, INumberDataSource nds)
         {
             mContext = context_;
             mNumberDataSource = nds;
             taskId = System.Threading.Tasks.TaskScheduler.Current.Id;
-            mNumberDataSource.DataReady += OnDataReady;
+            //mNumberDataSource.DataReady += OnDataReady;
             //mInstance = this;
         }
 
         private void OnDataReady(object sender, DataReadyArgs e)
         {
             this.mReceivedNumberData.Add(e.numberData);
-            //if (!this.InvokeRequired)
-            //{
-            //    ShowDialog(e.numberData);
-            //}
-            //else {
-            //    ShowDialog(e.numberData);
-            //    Log.Debug("IncomingCallReceiver", "Blow up");
-            //}
         }
 
         public override void OnCallStateChanged(CallState state, string incomingNumber)
         {
             if (state == CallState.Ringing)
             {
-                //Console.WriteLine("Incommming call detected from " + incomingNumber);
                 Log.Debug("IncomingCallReceiver","Incommming call detected from " + incomingNumber);
-
-                //AlertDialog.Builder alertDialog = new AlertDialog.Builder(this.mContext, 2);
-                //alertDialog.SetTitle("Title");
-                //alertDialog.SetMessage("message");
-                //alertDialog.SetPositiveButton("Ok", delegate
-                //{
-                //});
-                //alertDialog.SetNegativeButton("Close", delegate
-                //{
-                //});
-                //AlertDialog alert = alertDialog.Create();
-                //alert.Window.SetType(WindowManagerTypes.SystemAlert);
-                //alert.Show();
-
                 mNumberDataSource.GetNumberData(incomingNumber, this);
                 WaitForResponce();
             }
@@ -128,37 +95,27 @@ namespace WhoCallsFi
                             + nd.address + "\n"
                             + nd.warning + "\n"
                             + "\nComments:\n";
+            List<string> comments;
+            comments = (nd.comments.Count() > 20) ? nd.comments.Take(20).ToList<string>() : nd.comments;
 
-            //foreach (var comment in nd.comments) {
-            //    message += comment + "\n";
-            //}
+            foreach (var c in comments)
+            {
+                message += c + "\n";
+            }
 
             alertDialog.SetMessage(message);
 
-            alertDialog.SetPositiveButton("Ok", delegate {
+            alertDialog.SetPositiveButton("Got it", delegate {
                 //base.OnCallStateChanged(state, incomingNumber); Cause of exception?
             });
-            alertDialog.SetNegativeButton("Close", delegate {
+            //alertDialog.SetNegativeButton("Close", delegate
+            //{
 
-            });
+            //});
             AlertDialog alert = alertDialog.Create();
             alert.Window.SetType(WindowManagerTypes.SystemAlert);
             alert.Show();
         }
 
-        public IAsyncResult BeginInvoke(Delegate method, object[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object EndInvoke(IAsyncResult result)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Invoke(Delegate method, object[] args)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

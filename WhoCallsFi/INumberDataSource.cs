@@ -37,13 +37,10 @@ namespace WhoCallsFi
     /// </summary>
     public interface INumberDataSource
     {
-        event EventHandler<DataReadyArgs> DataReady;
 
         // async
         void GetNumberData(string number, INumberDataReceiver receiver);
 
-        // sync
-        void SyncGetNumberData(string number, INumberDataReceiver receiver);
     }
 
     public interface INumberDataReceiver
