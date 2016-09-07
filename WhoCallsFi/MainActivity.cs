@@ -92,7 +92,11 @@ namespace WhoCallsFi
         {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.SetTitle("Caller info app");
-            alertDialog.SetMessage("Author: Matti Reijonen\n(c) Matkalla Työkkäriin Industries\n savvy?");
+            alertDialog.SetMessage("Author: Matti Reijonen\n"+
+                                   "(c) Matkalla Työkkäriin Industries\n\n"+
+                                   "Version: 0.5.1\n" +
+                                   "Code name: Mämmikoura\n\n" +
+                                   "savvy?");
             alertDialog.SetPositiveButton("Ok, then", delegate { });
             AlertDialog alert = alertDialog.Create();
             alert.Window.SetType(WindowManagerTypes.ApplicationAttachedDialog);
