@@ -28,10 +28,10 @@ namespace WhoCallsFi
         private INumberDataSource mNumberDataSource;
 
         private List<NumberData> mReceivedNumberData = new List<NumberData>();
-
-        //static public IncomingCallReceiver mInstance;
+        
         private int taskId;
 
+        private Handler mHandler = new Handler();
 
         public IncomingCallReceiver(Context context_, INumberDataSource nds)
         {
@@ -63,7 +63,7 @@ namespace WhoCallsFi
         /// <param name="incomingNumber"></param>
         public void simulateCallStateChanged(string incomingNumber) {
             mNumberDataSource.GetNumberData(incomingNumber, this);
-            WaitForResponce();
+            //WaitForResponce();
         }
 
         private void WaitForResponce()
@@ -81,7 +81,8 @@ namespace WhoCallsFi
         }
 
         public void ReceiveNumberData(NumberData nd) {
-            mReceivedNumberData.Add(nd);
+            //mReceivedNumberData.Add(nd);
+            mHandler.Post(() => { ShowDialog(nd); });
             //ShowDialog(nd);
         }
 

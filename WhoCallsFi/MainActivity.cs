@@ -53,7 +53,7 @@ namespace WhoCallsFi
         private IEnumerable<string> GetActiveServices()
         {
             var manager = (ActivityManager)GetSystemService(ActivityService);
-
+            
             return manager.GetRunningServices(int.MaxValue).Select(
                 service => service.Service.ClassName).ToList();
         }
