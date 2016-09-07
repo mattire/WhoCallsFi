@@ -63,9 +63,13 @@ namespace WhoCallsFi
         /// <param name="incomingNumber"></param>
         public void simulateCallStateChanged(string incomingNumber) {
             mNumberDataSource.GetNumberData(incomingNumber, this);
-            //WaitForResponce();
+            WaitForResponce(); // dont fix with handler call
         }
 
+        /// <summary>
+        /// DO NOT FIX, with Handler code. Handler jams the UI, 
+        /// and does not show the dialog on top of incoming call view
+        /// </summary>
         private void WaitForResponce()
         {
             int i = 0;
@@ -81,9 +85,11 @@ namespace WhoCallsFi
         }
 
         public void ReceiveNumberData(NumberData nd) {
-            //mReceivedNumberData.Add(nd);
-            mHandler.Post(() => { ShowDialog(nd); });
-            //ShowDialog(nd);
+
+            mReceivedNumberData.Add(nd);
+
+            // Do not remove, this commented code is here to remind what does not work
+            //mHandler.Post(() => { ShowDialog(nd); });
         }
 
         public void ShowDialog(NumberData nd)

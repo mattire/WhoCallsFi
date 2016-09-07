@@ -12,16 +12,19 @@ using Android.Widget;
 using Android.OS;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace WhoCallsFi
 {
     class WhoCallsServiceConnection : Java.Lang.Object, IServiceConnection
     {
         MainActivity activity;
+        private bool runStart;
 
-        public WhoCallsServiceConnection(MainActivity activity)
+        public WhoCallsServiceConnection(MainActivity activity, bool runStart = false)
         {
             this.activity = activity;
+            this.runStart = runStart;
         }
 
         public void OnServiceConnected(ComponentName name, IBinder service)
@@ -31,6 +34,11 @@ namespace WhoCallsFi
             {
                 activity.binder = callServiceBinder;
                 activity.isBound = true;
+                activity.binder.GetWhoCallsService().ServiceStarted += activity.MainActivity_ServiceStarted;
+                activity.binder.GetWhoCallsService().ServiceStopped += activity.MainActivity_ServiceStopped;
+                if (runStart) {
+                    activity.StartService(new Intent(activity, typeof(WhoCallsService)));
+                }
             }
         }
 
@@ -49,6 +57,7 @@ namespace WhoCallsFi
         public bool isBound = false;
         private WhoCallsServiceConnection whoCallsServiceConnection;
         internal WhoCallsServiceBinder binder;
+        private TextView txtView;
 
         private IEnumerable<string> GetActiveServices()
         {
@@ -76,7 +85,7 @@ namespace WhoCallsFi
             Button btnStart = FindViewById<Button>(Resource.Id.btnStart);
             Button btnStop = FindViewById<Button>(Resource.Id.btnStop);
 
-            var txtView = FindViewById<TextView>(Resource.Id.textView1);
+            txtView = FindViewById<TextView>(Resource.Id.textView1);
 
             Button btnSimulate = FindViewById<Button>(Resource.Id.btnSimulate);
             EditText editTxt = FindViewById<EditText>(Resource.Id.editText1);
@@ -98,20 +107,36 @@ namespace WhoCallsFi
             }
 
             btnStart.Click += delegate {
-                StartService(new Intent(this, typeof(WhoCallsService)));
+                if (isBound == false)
+                {
+                    var whoCallsServiceIntent1 = new Intent("com.xamarin.WhoCallsService");
+                    whoCallsServiceConnection = new WhoCallsServiceConnection(this, true);
+                    BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
+                    Thread.Sleep(1000);
+                }
+                else {
+                    StartService(new Intent(this, typeof(WhoCallsService)));
+                }
 
             };
 
             btnStop.Click += delegate {
+                //binder.GetWhoCallsService().mServiceOn = false;
+                txtView.Text = "Service will close on app close";
+                UnbindService(whoCallsServiceConnection);
+                isBound = false;
+                //binder.GetWhoCallsService().CloseService();
                 StopService(new Intent(this, typeof(WhoCallsService)));
+                whoCallsServiceConnection.Dispose();
+                whoCallsServiceConnection = null;
             };
 
             btnSimulate.Click += delegate{
                 if (isBound == false)
                 {
-                    var whoCallsServiceIntent = new Intent("com.xamarin.WhoCallsService");
+                    var whoCallsServiceIntent1 = new Intent("com.xamarin.WhoCallsService");
                     whoCallsServiceConnection = new WhoCallsServiceConnection(this);
-                    BindService(whoCallsServiceIntent, whoCallsServiceConnection, Bind.AutoCreate);
+                    BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
                 }
                 else {
                     var str = editTxt.Text;
@@ -120,6 +145,25 @@ namespace WhoCallsFi
 
             };
 
+            var whoCallsServiceIntent = new Intent("com.xamarin.WhoCallsService");
+            whoCallsServiceConnection = new WhoCallsServiceConnection(this);
+            BindService(whoCallsServiceIntent, whoCallsServiceConnection, Bind.AutoCreate);
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+        }
+
+        public void MainActivity_ServiceStopped(object sender, EventArgs e)
+        {
+            txtView.Text = "Service is not active";
+        }
+
+        public void MainActivity_ServiceStarted(object sender, EventArgs e)
+        {
+            txtView.Text = "Service is active";
         }
     }
 }

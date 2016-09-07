@@ -25,11 +25,11 @@ public class WhoCallsServiceConnection
 			mono.android.TypeManager.Activate ("WhoCallsFi.WhoCallsServiceConnection, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
 	}
 
-	public WhoCallsServiceConnection (md5b1823cc34a283e5868f52dd92bb3ef97.MainActivity p0) throws java.lang.Throwable
+	public WhoCallsServiceConnection (md5b1823cc34a283e5868f52dd92bb3ef97.MainActivity p0, boolean p1) throws java.lang.Throwable
 	{
 		super ();
 		if (getClass () == WhoCallsServiceConnection.class)
-			mono.android.TypeManager.Activate ("WhoCallsFi.WhoCallsServiceConnection, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "WhoCallsFi.MainActivity, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", this, new java.lang.Object[] { p0 });
+			mono.android.TypeManager.Activate ("WhoCallsFi.WhoCallsServiceConnection, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "WhoCallsFi.MainActivity, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null:System.Boolean, mscorlib, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e", this, new java.lang.Object[] { p0, p1 });
 	}
 
 

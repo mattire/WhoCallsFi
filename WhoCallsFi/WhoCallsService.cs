@@ -24,11 +24,14 @@ namespace WhoCallsFi
     [IntentFilter(new String[] { "com.xamarin.WhoCallsService" })]
     public class WhoCallsService : Service
     {
+        public event EventHandler ServiceStarted;
+        public event EventHandler ServiceStopped;
+
+
         WhoCallsServiceBinder binder;
         private IncomingCallReceiver mICR;
         private TelephonyManager mTelmngr;
-
-        private bool mServiceOn;
+        public bool mServiceOn;
 
         public override StartCommandResult OnStartCommand(Android.Content.Intent intent, StartCommandFlags flags, int startId)
         {
@@ -41,11 +44,15 @@ namespace WhoCallsFi
             mTelmngr.Listen(mICR, PhoneStateListenerFlags.CallState);
 
             mServiceOn = true;
-            DoWork(); // need thread to keep alive
-            
-            return StartCommandResult.NotSticky;
-            //return StartCommandResult.Sticky;
+            //DoWork(); // need thread to keep alive
+
+            ServiceStarted.Invoke(this, null);
+
+            //return StartCommandResult.NotSticky;
+            return StartCommandResult.Sticky;
         }
+
+        
 
         public void SimulateCall(string number) {
             mICR.simulateCallStateChanged(number);
@@ -62,11 +69,8 @@ namespace WhoCallsFi
                     }
                 }
 
-                //SendNotification();
-
                 Log.Debug("HelloService", "Stopping foreground");
-                StopForeground(true);
-                
+                StopForeground(true);                
                 StopSelf();
             });
 
@@ -76,11 +80,11 @@ namespace WhoCallsFi
 
         public override void OnDestroy()
         {
+            ServiceStopped.Invoke(this, null);
             mServiceOn = false;
             base.OnDestroy();
             mTelmngr.Dispose();
             mICR.Dispose();
-            
             Log.Debug("WhoCallsService", "WhoCallsService stopped");
         }
 
@@ -98,6 +102,12 @@ namespace WhoCallsFi
             StartForeground((int)NotificationFlags.ForegroundService, notification);
         }
 
+        internal void CloseService()
+        {
+            //StopForeground(true);
+            StopSelf();
+            OnDestroy();
+        }
     }
 
     public class WhoCallsServiceBinder : Binder
