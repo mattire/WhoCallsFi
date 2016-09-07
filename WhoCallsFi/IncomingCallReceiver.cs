@@ -52,6 +52,7 @@ namespace WhoCallsFi
             if (state == CallState.Ringing)
             {
                 Log.Debug("IncomingCallReceiver","Incommming call detected from " + incomingNumber);
+                Toast.MakeText(mContext, "Started fetching number", ToastLength.Long).Show();
                 mNumberDataSource.GetNumberData(incomingNumber, this);
                 WaitForResponce();
             }
@@ -62,6 +63,8 @@ namespace WhoCallsFi
         /// </summary>
         /// <param name="incomingNumber"></param>
         public void simulateCallStateChanged(string incomingNumber) {
+            //OnCallStateChanged(CallState.Ringing, incomingNumber);
+            Toast.MakeText(mContext, "Started fetching number", ToastLength.Long).Show();
             mNumberDataSource.GetNumberData(incomingNumber, this);
             WaitForResponce(); // dont fix with handler call
         }

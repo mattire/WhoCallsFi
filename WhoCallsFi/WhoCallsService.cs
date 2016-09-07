@@ -39,7 +39,7 @@ namespace WhoCallsFi
 
             //StartServiceInForeground();
             
-            mICR = new IncomingCallReceiver(this, new KukaSoittiHandler());
+            mICR = new IncomingCallReceiver(this, new KukaSoittiHandler(this));
             mTelmngr = (TelephonyManager)base.GetSystemService(TelephonyService);
             mTelmngr.Listen(mICR, PhoneStateListenerFlags.CallState);
 
@@ -63,8 +63,10 @@ namespace WhoCallsFi
             ServiceStopped.Invoke(this, null);
             mServiceOn = false;
             base.OnDestroy();
-            mTelmngr.Dispose();
-            mICR.Dispose();
+            if(mTelmngr!=null)
+                mTelmngr.Dispose();
+            if(mICR!=null)
+                mICR.Dispose();
             Log.Debug("WhoCallsService", "WhoCallsService stopped");
         }
 

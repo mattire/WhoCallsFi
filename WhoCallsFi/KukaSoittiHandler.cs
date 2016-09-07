@@ -22,7 +22,13 @@ namespace WhoCallsFi
 
     class KukaSoittiHandler : INumberDataSource
     {
+        private Context mContext;
+
         //public event EventHandler<DataReadyArgs> DataReady;
+
+        public KukaSoittiHandler(Context c) {
+            mContext = c;
+        }
 
         private string assembleUri(string number)
         {
@@ -55,6 +61,7 @@ namespace WhoCallsFi
         }
 
         private void HandleResponce(string number, string str, INumberDataReceiver receiver) {
+            //Toast.MakeText(mContext, "Parsing number data", ToastLength.Long);
             NumberData nd = new NumberData();
 
             HtmlAgilityPack.HtmlDocument hd = new HtmlAgilityPack.HtmlDocument();
