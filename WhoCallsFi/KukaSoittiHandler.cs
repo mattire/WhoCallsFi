@@ -77,6 +77,8 @@ namespace WhoCallsFi
             if (cntTxtDiv.ChildNodes.ElementAt(5).Name == "p" && cntTxtDiv.ChildNodes.ElementAt(5).Attributes["style"] != null)
             {
                 warning = cntTxtDiv.ChildNodes.ElementAt(5).InnerText;
+                warning = warning.Replace("&auml;", "ä");
+                warning = warning.Replace("&ouml;", "ö");
                 Console.WriteLine(warning);
             }
 

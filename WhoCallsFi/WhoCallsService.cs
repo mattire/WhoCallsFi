@@ -21,7 +21,7 @@ using System.Threading;
 namespace WhoCallsFi
 {
     [Service]
-    [IntentFilter(new String[] { "com.xamarin.WhoCallsService" })]
+    [IntentFilter(new string[] { "com.mti.WhoCallsService" })]
     public class WhoCallsService : Service
     {
         public event EventHandler ServiceStarted;
@@ -58,26 +58,6 @@ namespace WhoCallsFi
             mICR.simulateCallStateChanged(number);
         }
 
-        private void DoWork()
-        {
-            var t = new Thread(() => {
-
-                while (true) {
-                    Thread.Sleep(14000);
-                    if (!mServiceOn) {
-                        break;
-                    }
-                }
-
-                Log.Debug("HelloService", "Stopping foreground");
-                StopForeground(true);                
-                StopSelf();
-            });
-
-            t.Start();
-
-        }
-
         public override void OnDestroy()
         {
             ServiceStopped.Invoke(this, null);
@@ -102,12 +82,6 @@ namespace WhoCallsFi
             StartForeground((int)NotificationFlags.ForegroundService, notification);
         }
 
-        internal void CloseService()
-        {
-            //StopForeground(true);
-            StopSelf();
-            OnDestroy();
-        }
     }
 
     public class WhoCallsServiceBinder : Binder

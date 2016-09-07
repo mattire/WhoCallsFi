@@ -60,6 +60,9 @@ namespace WhoCallsFi
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050006
+			public const int about = 2131034118;
+			
 			// aapt resource value: 0x7f050005
 			public const int btnSimulate = 2131034117;
 			
@@ -93,6 +96,9 @@ namespace WhoCallsFi
 			
 			// aapt resource value: 0x7f030000
 			public const int Main = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Menu = 2130903041;
 			
 			static Layout()
 			{

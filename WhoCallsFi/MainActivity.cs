@@ -67,6 +67,38 @@ namespace WhoCallsFi
                 service => service.Service.ClassName).ToList();
         }
 
+        public override bool OnPrepareOptionsMenu(IMenu menu)
+        {
+            menu.Clear();
+            MenuInflater.Inflate(Resource.Layout.Menu, menu);
+            return base.OnPrepareOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                //case Resource.Id.test:
+                //    //open other view (activity)
+                //    return true;
+                case Resource.Id.about:
+                    showMenuDialog();
+                    return true;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        private void showMenuDialog()
+        {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.SetTitle("Caller info app");
+            alertDialog.SetMessage("Author: Matti Reijonen\n(c) Matkalla Työkkäriin Industries\n savvy?");
+            alertDialog.SetPositiveButton("Ok, then", delegate { });
+            AlertDialog alert = alertDialog.Create();
+            alert.Window.SetType(WindowManagerTypes.ApplicationAttachedDialog);
+            alert.Show();
+        }
+
         protected override void OnDestroy()
         {
             if (whoCallsServiceConnection != null) {
@@ -109,43 +141,51 @@ namespace WhoCallsFi
             btnStart.Click += delegate {
                 if (isBound == false)
                 {
-                    var whoCallsServiceIntent1 = new Intent("com.xamarin.WhoCallsService");
+                    var whoCallsServiceIntent1 = new Intent("com.mti.WhoCallsService");
                     whoCallsServiceConnection = new WhoCallsServiceConnection(this, true);
                     BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
                     Thread.Sleep(1000);
                 }
-                else {
+                else
+                {
                     StartService(new Intent(this, typeof(WhoCallsService)));
                 }
-
             };
 
             btnStop.Click += delegate {
-                //binder.GetWhoCallsService().mServiceOn = false;
-                txtView.Text = "Service will close on app close";
-                UnbindService(whoCallsServiceConnection);
-                isBound = false;
-                //binder.GetWhoCallsService().CloseService();
-                StopService(new Intent(this, typeof(WhoCallsService)));
-                whoCallsServiceConnection.Dispose();
-                whoCallsServiceConnection = null;
+                if (txtView.Text == "Service is not active") {
+                    Toast.MakeText(this, "SERVICE ALREADY STOPPED", ToastLength.Long).Show();
+                } else {
+                    txtView.Text = "Service will close on app close";
+                    UnbindService(whoCallsServiceConnection);
+                    isBound = false;
+                    StopService(new Intent(this, typeof(WhoCallsService)));
+                    whoCallsServiceConnection.Dispose();
+                    whoCallsServiceConnection = null;
+                }
             };
 
             btnSimulate.Click += delegate{
-                if (isBound == false)
+                if (txtView.Text == "Service is active")
                 {
-                    var whoCallsServiceIntent1 = new Intent("com.xamarin.WhoCallsService");
-                    whoCallsServiceConnection = new WhoCallsServiceConnection(this);
-                    BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
+                    if (isBound == false)
+                    {
+                        var whoCallsServiceIntent1 = new Intent("com.mti.WhoCallsService");
+                        whoCallsServiceConnection = new WhoCallsServiceConnection(this);
+                        BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
+                    }
+                    else {
+                        var str = editTxt.Text;
+                        binder.GetWhoCallsService().SimulateCall(str);
+                    }
                 }
-                else {
-                    var str = editTxt.Text;
-                    binder.GetWhoCallsService().SimulateCall(str);
+                else
+                {
+                    Toast.MakeText(this, "YOU MUST START SERVICE FIRST!!", ToastLength.Long).Show();
                 }
-
             };
 
-            var whoCallsServiceIntent = new Intent("com.xamarin.WhoCallsService");
+            var whoCallsServiceIntent = new Intent("com.mti.WhoCallsService");
             whoCallsServiceConnection = new WhoCallsServiceConnection(this);
             BindService(whoCallsServiceIntent, whoCallsServiceConnection, Bind.AutoCreate);
         }

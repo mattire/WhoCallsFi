@@ -16,7 +16,7 @@
     </activity>
     <service android:name="md5b1823cc34a283e5868f52dd92bb3ef97.WhoCallsService">
       <intent-filter>
-        <action android:name="com.xamarin.WhoCallsService" />
+        <action android:name="com.mti.WhoCallsService" />
       </intent-filter>
     </service>
     <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="WhoCallsFi.WhoCallsFi.mono.MonoRuntimeProvider.__mono_init__" />
