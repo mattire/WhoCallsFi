@@ -10,6 +10,10 @@ WhoCallsFi.MainActivity, WhoCallsFi;md5b1823cc34a283e5868f52dd92bb3ef97.MainActi
 WhoCallsFi.MainActivity, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5b1823cc34a283e5868f52dd92bb3ef97.MainActivity
 WhoCallsFi.MainActivity;md5b1823cc34a283e5868f52dd92bb3ef97.MainActivity
 whocallsfi.MainActivity;md5b1823cc34a283e5868f52dd92bb3ef97.MainActivity
+WhoCallsFi.StartReceiver, WhoCallsFi;md5b1823cc34a283e5868f52dd92bb3ef97.StartReceiver
+WhoCallsFi.StartReceiver, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5b1823cc34a283e5868f52dd92bb3ef97.StartReceiver
+WhoCallsFi.StartReceiver;md5b1823cc34a283e5868f52dd92bb3ef97.StartReceiver
+whocallsfi.StartReceiver;md5b1823cc34a283e5868f52dd92bb3ef97.StartReceiver
 WhoCallsFi.WhoCallsService, WhoCallsFi;md5b1823cc34a283e5868f52dd92bb3ef97.WhoCallsService
 WhoCallsFi.WhoCallsService, WhoCallsFi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5b1823cc34a283e5868f52dd92bb3ef97.WhoCallsService
 WhoCallsFi.WhoCallsService;md5b1823cc34a283e5868f52dd92bb3ef97.WhoCallsService

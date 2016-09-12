@@ -17,6 +17,7 @@ using Android.Widget;
 using Android.Telephony;
 using Android.Util;
 using System.Threading;
+using Android.Service.Notification;
 
 namespace WhoCallsFi
 {
@@ -26,6 +27,7 @@ namespace WhoCallsFi
     {
         public event EventHandler ServiceStarted;
         public event EventHandler ServiceStopped;
+        const int notificationId = 0;
 
 
         WhoCallsServiceBinder binder;
@@ -41,6 +43,7 @@ namespace WhoCallsFi
             
             mICR = new IncomingCallReceiver(this, new KukaSoittiHandler(this));
             mTelmngr = (TelephonyManager)base.GetSystemService(TelephonyService);
+            
             mTelmngr.Listen(mICR, PhoneStateListenerFlags.CallState);
 
             mServiceOn = true;
@@ -48,11 +51,30 @@ namespace WhoCallsFi
 
             ServiceStarted.Invoke(this, null);
 
-            //return StartCommandResult.NotSticky;
+            ShowNotification();
             return StartCommandResult.Sticky;
         }
 
-        
+        private void ShowNotification()
+        {
+            // Instantiate the builder and set notification elements:
+            Notification.Builder builder = new Notification.Builder(this)
+                .SetContentTitle("WhoCallsFi")
+                .SetContentText("WhoCallsFi service is running")
+                .SetSmallIcon(Resource.Drawable.Icon);
+
+            // Build the notification:
+            Notification notification = builder.Build();
+
+            // Get the notification manager:
+            NotificationManager notificationManager =
+                GetSystemService(Context.NotificationService) as NotificationManager;
+
+            // Publish the notification:
+            const int notificationId = 0;
+            notificationManager.Notify(notificationId, notification);
+
+        }
 
         public void SimulateCall(string number) {
             mICR.simulateCallStateChanged(number);
@@ -67,6 +89,9 @@ namespace WhoCallsFi
                 mTelmngr.Dispose();
             if(mICR!=null)
                 mICR.Dispose();
+            NotificationManager notificationManager =
+                GetSystemService(Context.NotificationService) as NotificationManager;
+            notificationManager.Cancel(WhoCallsService.notificationId);
             Log.Debug("WhoCallsService", "WhoCallsService stopped");
         }
 
@@ -79,10 +104,13 @@ namespace WhoCallsFi
         void StartServiceInForeground()
         {
             var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(WhoCallsService)), 0);
-            Toast.MakeText(this, "HelloService is running in the foreground", ToastLength.Long);
-            var notification = new Notification(Resource.Drawable.Icon, "*WhoCallsFi service started");
+            //Toast.MakeText(this, "Service is running in the foreground", ToastLength.Long);
+            var notification = new Notification(Resource.Drawable.Icon, "WhoCallsFi running");
+            //var id = ((StatusBarNotification)notification).Id;
             StartForeground((int)NotificationFlags.ForegroundService, notification);
         }
+
+
 
     }
 
