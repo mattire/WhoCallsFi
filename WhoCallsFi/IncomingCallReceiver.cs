@@ -49,6 +49,7 @@ namespace WhoCallsFi
 
         public override void OnCallStateChanged(CallState state, string incomingNumber)
         {
+            
             if (state == CallState.Ringing)
             {
                 Log.Debug("IncomingCallReceiver","Incommming call detected from " + incomingNumber);
@@ -83,8 +84,9 @@ namespace WhoCallsFi
             } while (mReceivedNumberData.Count()==0);
 
             Log.Debug("IncomingCallReceiver", i.ToString());
-
-            ShowDialog(mReceivedNumberData.ElementAt(0));
+            NumberData nd = mReceivedNumberData.ElementAt(0);
+            mReceivedNumberData.Remove(nd);
+            ShowDialog(nd);
         }
 
         public void ReceiveNumberData(NumberData nd) {

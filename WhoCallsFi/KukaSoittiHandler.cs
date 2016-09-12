@@ -37,11 +37,23 @@ namespace WhoCallsFi
 
         private async void readPage(string number, Action<string, string, INumberDataReceiver> callback, INumberDataReceiver receiver)
         {
-            string uri = assembleUri(number);
-            var hc = new HttpClient();
-            var bArray = await hc.GetByteArrayAsync(uri);
-            var str = System.Text.Encoding.Default.GetString(bArray);
-            callback(number, str, receiver);
+
+            try
+            {
+                string uri = assembleUri(number);
+                var hc = new HttpClient();
+                Android.Util.Log.Debug("KukaSoittiHandler", uri);
+                var bArray = await hc.GetByteArrayAsync(uri);
+                var str = System.Text.Encoding.Default.GetString(bArray);
+                callback(number, str, receiver);
+
+            }
+            catch (System.Net.Http.HttpRequestException ex)
+            {
+                Android.Util.Log.Error("KukaSoittiHandler", ex.Message);
+                callback(number, "Exception:" + ex.Message, receiver);
+                
+            }
         }
 
         private async System.Threading.Tasks.Task<string> syncReadPage(string number)
@@ -56,13 +68,21 @@ namespace WhoCallsFi
         //INumberDataSource
         public void GetNumberData(string number, INumberDataReceiver receiver)
         {
-            Thread th = new Thread(() => this.readPage(number, HandleResponce, receiver));
+            Thread th = new Thread(() => readPage(number, HandleResponce, receiver));
             th.Start();
         }
 
         private void HandleResponce(string number, string str, INumberDataReceiver receiver) {
             //Toast.MakeText(mContext, "Parsing number data", ToastLength.Long);
             NumberData nd = new NumberData();
+            List<string> comments = new List<string>();
+
+            if (str.StartsWith("Exception:")) {
+                nd.number = number;
+                nd.warning = str.Substring(10);
+                nd.comments = comments;
+                receiver.ReceiveNumberData(nd);
+            }
 
             HtmlAgilityPack.HtmlDocument hd = new HtmlAgilityPack.HtmlDocument();
             hd.LoadHtml(str);
@@ -70,7 +90,7 @@ namespace WhoCallsFi
             var cntTxtDiv = hd.DocumentNode.Descendants("div").Where(div => div.GetAttributeValue("class", "") == "cnt-txt").ElementAt(0);
 
             string name = "", address = "", warning = "";
-            List<string> comments = new List<string>();
+            
 
             // #text, h1, br, p, p
             if (cntTxtDiv.ChildNodes.ElementAt(3).Name == "p" && cntTxtDiv.ChildNodes.ElementAt(4).Name == "p")
@@ -95,9 +115,11 @@ namespace WhoCallsFi
             foreach (var div in divs)
             {
                 var ps = div.Descendants("p");
-                Console.WriteLine("Comment:");
-                Console.WriteLine(ps.ElementAt(0).InnerText);
-                Console.WriteLine(ps.ElementAt(1).InnerText);
+                Android.Util.Log.Debug("WhoCallsFi KukaSoittiHandler", "comment:");
+                //Console.WriteLine("Comment:");
+                Android.Util.Log.Debug("WhoCallsFi KukaSoittiHandler", ps.ElementAt(0).InnerText);
+                Android.Util.Log.Debug("WhoCallsFi KukaSoittiHandler", ps.ElementAt(1).InnerText);
+                //Console.WriteLine(ps.ElementAt(1).InnerText);
                 comments.Add(ps.ElementAt(0).InnerText + ":" + ps.ElementAt(1).InnerText);
             }
 
