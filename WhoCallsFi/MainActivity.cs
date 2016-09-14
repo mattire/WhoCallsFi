@@ -78,9 +78,6 @@ namespace WhoCallsFi
         {
             switch (item.ItemId)
             {
-                //case Resource.Id.test:
-                //    //open other view (activity)
-                //    return true;
                 case Resource.Id.about:
                     showMenuDialog();
                     return true;
@@ -91,14 +88,9 @@ namespace WhoCallsFi
         private void showMenuDialog()
         {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.SetTitle("Caller info app");
-            alertDialog.SetMessage("Author: Matti Reijonen\n"+
-                                   "(c) Matkalla Työkkäriin Industries\n"+
-                                   "7th September 2016\n\n" +
-                                   "Version: 0.5.2\n" +
-                                   "Code name: Mämmikoura\n\n" +
-                                   "savvy?");
-            alertDialog.SetPositiveButton("Ok, then", delegate { });
+            alertDialog.SetTitle(GetString(Resource.String.AboutDialogTitle));
+            alertDialog.SetMessage(GetString(Resource.String.AboutDialogText));
+            alertDialog.SetPositiveButton(GetString(Resource.String.AboutDialogOk), delegate { });
             AlertDialog alert = alertDialog.Create();
             alert.Window.SetType(WindowManagerTypes.ApplicationAttachedDialog);
             alert.Show();
@@ -136,17 +128,17 @@ namespace WhoCallsFi
             //WhoCallsService
             if (services.Any(s => s.EndsWith("WhoCallsService")))
             {
-                txtView.Text = "Service is active";
+                txtView.Text = GetString(Resource.String.ServiceIsActive);
             }
             else
             {
-                txtView.Text = "Service is not active";
+                txtView.Text = GetString(Resource.String.ServiceNotActive);
             }
 
             btnStart.Click += delegate {
                 if (isBound == false)
                 {
-                    var whoCallsServiceIntent1 = new Intent("com.mti.WhoCallsService");
+                    var whoCallsServiceIntent1 = new Intent(GetString(Resource.String.WhoCallsFiServiceName));
                     whoCallsServiceConnection = new WhoCallsServiceConnection(this, true);
                     BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
                     Thread.Sleep(1000);
@@ -158,10 +150,9 @@ namespace WhoCallsFi
             };
 
             btnStop.Click += delegate {
-                if (txtView.Text == "Service is not active") {
-                    Toast.MakeText(this, "SERVICE ALREADY STOPPED", ToastLength.Long).Show();
+                if (txtView.Text == GetString(Resource.String.ServiceNotActive)) {
+                    Toast.MakeText(this, GetString(Resource.String.ServiceAlreadyStoppedMessage), ToastLength.Long).Show();
                 } else {
-                    txtView.Text = "Service will close on app close";
                     UnbindService(whoCallsServiceConnection);
                     isBound = false;
                     StopService(new Intent(this, typeof(WhoCallsService)));
@@ -171,11 +162,11 @@ namespace WhoCallsFi
             };
 
             btnSimulate.Click += delegate{
-                if (txtView.Text == "Service is active")
+                if (txtView.Text == GetString(Resource.String.ServiceIsActive))
                 {
                     if (isBound == false)
                     {
-                        var whoCallsServiceIntent1 = new Intent("com.mti.WhoCallsService");
+                        var whoCallsServiceIntent1 = new Intent(GetString(Resource.String.WhoCallsFiServiceName));
                         whoCallsServiceConnection = new WhoCallsServiceConnection(this);
                         BindService(whoCallsServiceIntent1, whoCallsServiceConnection, Bind.AutoCreate);
                     }
@@ -186,11 +177,11 @@ namespace WhoCallsFi
                 }
                 else
                 {
-                    Toast.MakeText(this, "YOU MUST START SERVICE FIRST!!", ToastLength.Long).Show();
+                    Toast.MakeText(this, GetString(Resource.String.StartServiceMessage), ToastLength.Long).Show();
                 }
             };
 
-            var whoCallsServiceIntent = new Intent("com.mti.WhoCallsService");
+            var whoCallsServiceIntent = new Intent(GetString(Resource.String.WhoCallsFiServiceName));
             whoCallsServiceConnection = new WhoCallsServiceConnection(this);
             BindService(whoCallsServiceIntent, whoCallsServiceConnection, Bind.AutoCreate);
         }
@@ -203,12 +194,12 @@ namespace WhoCallsFi
 
         public void MainActivity_ServiceStopped(object sender, EventArgs e)
         {
-            txtView.Text = "Service is not active";
+            txtView.Text = GetString(Resource.String.ServiceNotActive);
         }
 
         public void MainActivity_ServiceStarted(object sender, EventArgs e)
         {
-            txtView.Text = "Service is active";
+            txtView.Text = GetString(Resource.String.ServiceIsActive);
         }
     }
 }

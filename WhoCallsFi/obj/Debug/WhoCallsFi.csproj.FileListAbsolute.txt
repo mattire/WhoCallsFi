@@ -40,5 +40,5 @@ c:\users\matti\documents\visual studio 2015\Projects\WhoCallsFi\WhoCallsFi\obj\D
 c:\users\matti\documents\visual studio 2015\Projects\WhoCallsFi\WhoCallsFi\obj\Debug\android\assets\System.Xml.Linq.dll.mdb
 c:\users\matti\documents\visual studio 2015\Projects\WhoCallsFi\WhoCallsFi\obj\Debug\android\assets\WhoCallsFi.dll.mdb
 C:\Users\Matti\Documents\Visual Studio 2015\Projects\WhoCallsFi\WhoCallsFi\obj\Debug\res\layout\menu.xml
-C:\Users\Matti\documents\visual studio 2015\Projects\WhoCallsFi\WhoCallsFi\obj\Debug\WhoCallsFi.dll.mdb
-C:\Users\Matti\documents\visual studio 2015\Projects\WhoCallsFi\WhoCallsFi\bin\Debug\WhoCallsFi.dll.mdb
+C:\Users\Matti\Documents\Visual Studio 2015\Projects\WhoCallsFi\WhoCallsFi\obj\Debug\WhoCallsFi.dll.mdb
+C:\Users\Matti\Documents\Visual Studio 2015\Projects\WhoCallsFi\WhoCallsFi\bin\Debug\WhoCallsFi.dll.mdb

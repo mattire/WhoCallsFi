@@ -22,13 +22,12 @@ using Android.Service.Notification;
 namespace WhoCallsFi
 {
     [Service]
-    [IntentFilter(new string[] { "com.mti.WhoCallsService" })]
+    [IntentFilter(new string[] { "com.mti.WhoCallsService" })] // can't use resources strings in attributes
     public class WhoCallsService : Service
     {
         public event EventHandler ServiceStarted;
         public event EventHandler ServiceStopped;
         const int notificationId = 0;
-
 
         WhoCallsServiceBinder binder;
         private IncomingCallReceiver mICR;

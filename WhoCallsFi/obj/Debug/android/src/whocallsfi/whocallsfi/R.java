@@ -27,7 +27,20 @@ public final class R {
         public static final int menu=0x7f030001;
     }
     public static final class string {
+        public static final int AboutDialogOk=0x7f04000e;
+        public static final int AboutDialogText=0x7f04000d;
+        public static final int AboutDialogTitle=0x7f04000c;
         public static final int ApplicationName=0x7f040001;
+        public static final int DefaultFetchNumber=0x7f04000b;
         public static final int Hello=0x7f040000;
+        public static final int NumberDataFetching=0x7f04000a;
+        public static final int ServiceAlreadyStoppedMessage=0x7f040004;
+        public static final int ServiceControlsLabel=0x7f040007;
+        public static final int ServiceIsActive=0x7f040002;
+        public static final int ServiceNotActive=0x7f040003;
+        public static final int StartServiceMessage=0x7f040005;
+        public static final int StartServiceText=0x7f040008;
+        public static final int StopServiceText=0x7f040009;
+        public static final int WhoCallsFiServiceName=0x7f040006;
     }
 }

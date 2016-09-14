@@ -16,6 +16,7 @@ using Android.Views;
 using Android.Widget;
 using System.Net.Http;
 using System.Threading;
+using Android.Util;
 
 namespace WhoCallsFi
 {
@@ -41,10 +42,18 @@ namespace WhoCallsFi
             try
             {
                 string uri = assembleUri(number);
+
+                var startFetching = DateTime.Now;
+
                 var hc = new HttpClient();
                 Android.Util.Log.Debug("KukaSoittiHandler", uri);
                 var bArray = await hc.GetByteArrayAsync(uri);
                 var str = System.Text.Encoding.Default.GetString(bArray);
+
+                var endFetching = DateTime.Now;
+                var diff = endFetching - startFetching;
+                Log.Debug("KukaSoittiHandler time to data", diff.Seconds.ToString());
+
                 callback(number, str, receiver);
 
             }
@@ -74,6 +83,9 @@ namespace WhoCallsFi
 
         private void HandleResponce(string number, string str, INumberDataReceiver receiver) {
             //Toast.MakeText(mContext, "Parsing number data", ToastLength.Long);
+
+            var startParsing = DateTime.Now;
+
             NumberData nd = new NumberData();
             List<string> comments = new List<string>();
 
@@ -131,8 +143,11 @@ namespace WhoCallsFi
 
             DataReadyArgs dra = new DataReadyArgs(nd);
 
-
             //DataReady?.Invoke(this, dra);
+
+            var endParsing = DateTime.Now;
+            var diff = endParsing - startParsing;
+            Log.Debug("KukaSoittiHandler - time parsing", diff.Seconds.ToString());
 
             receiver.ReceiveNumberData(nd);
         }

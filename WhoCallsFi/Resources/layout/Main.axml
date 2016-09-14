@@ -4,23 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        android:text="Medium Text"
+        android:text="@string/ServiceControlsLabel"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView1" />
     <Button
-        android:text="Start"
+        android:text="@string/StartServiceText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnStart" />
     <Button
-        android:text="Stop"
+        android:text="@string/StopServiceText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnStop" />
     <TextView
-        android:text="Simulate call alert"
+        android:text="@string/NumberDataFetching"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,9 +30,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText1"
-        android:text="0440337474" />
+        android:text="@string/DefaultFetchNumber" />
     <Button
-        android:text="Simulate"
+        android:text="Fetch number info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnSimulate" />
